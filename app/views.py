@@ -47,6 +47,25 @@ def upload():
             return redirect(url_for('home'))
 
     return render_template('upload.html',form=form)
+    
+def get_uploaded_images():
+    PicNames= os.listdir(filefolder)
+    Pics=[]
+    for i in PicNames:
+        FirstN,Ext= i.split(".")
+        if Ext == "jpg" or Ext == "png":
+            Pics.append(i)
+    return Pics
+    
+@app.route('/files')   
+def files():
+    if not session.get('logged_in'):
+        abort(401)
+        
+    PicNames= get_uploaded_images()
+    return render_template('files.html', PicNames=PicNames)
+
+    
 
 
 @app.route('/login', methods=['POST', 'GET'])
